@@ -1,4 +1,3 @@
-````markdown
 # VA Chat API
 
 **VA Chat API** to kompletny backend do aplikacji czatu, zbudowany w **FastAPI** i obsługujący:
