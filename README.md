@@ -14,34 +14,34 @@
 
 ## Spis treści
 
-1. [Wymagania](#wymagania)  
-2. [Instalacja](#instalacja)  
-3. [Struktura projektu](#struktura-projektu)  
-4. [Zmienne środowiskowe](#zmienne-środowiskowe)  
-5. [Uruchomienie](#uruchomienie)
-6. [Rola: User vs Admin](#rola-user-vs-admin)
-7. [REST API](#rest-api)  
-   - [Autoryzacja](#autoryzacja)  
-     - [POST /auth/register](#post-authregister)  
-     - [POST /auth/login](#post-authlogin)  
-   - [Użytkownicy](#użytkownicy)  
-     - [GET /users/me](#get-usersme)  
-     - [GET /users/](#get-users)  
-     - [GET /users/{user_id}](#get-usersuser_id)  
-   - [Grupy](#grupy)  
-     - [POST /groups/](#post-groups)  
-     - [GET /groups/](#get-groups)  
-     - [GET /groups/{group_id}](#get-groupsgroup_id)  
-     - [POST /groups/{group_id}/add-user/{user_id}](#post-groupsgroup_idadd-useruser_id)  
-     - [POST /groups/{group_id}/remove-user/{user_id}](#post-groupsgroup_idremove-useruser_id)  
-     - [DELETE /groups/{group_id}](#delete-groupsgroup_id)  
-   - [Wiadomości](#wiadomości)  
-     - [GET /messages/private/{other_user_id}](#get-messagesprivateother_user_id)  
-     - [POST /messages/private/{other_user_id}](#post-messagesprivateother_user_id)  
-     - [GET /messages/group/{group_id}](#get-messagesgroupgroup_id)  
-     - [POST /messages/group/{group_id}](#post-messagesgroupgroup_id)  
-8. [WebSocket – /​ws/​chat](#websocket--wschat)  
-9. [Przykłady użycia](#przykłady-użycia)
+1. [Wymagania]  
+2. [Instalacja]  
+3. [Struktura projektu]  
+4. [Zmienne środowiskowe]  
+5. [Uruchomienie]
+6. [Rola: User vs Admin]
+7. [REST API]  
+   - [Autoryzacja]  
+     - [POST /auth/register]  
+     - [POST /auth/login]  
+   - [Użytkownicy]  
+     - [GET /users/me]  
+     - [GET /users/]  
+     - [GET /users/{user_id}]  
+   - [Grupy]  
+     - [POST /groups/]  
+     - [GET /groups/]  
+     - [GET /groups/{group_id}]  
+     - [POST /groups/{group_id}/add-user/{user_id}]  
+     - [POST /groups/{group_id}/remove-user/{user_id}]  
+     - [DELETE /groups/{group_id}]  
+   - [Wiadomości]  
+     - [GET /messages/private/{other_user_id}]  
+     - [POST /messages/private/{other_user_id}]  
+     - [GET /messages/group/{group_id}]  
+     - [POST /messages/group/{group_id}]  
+8. [WebSocket]  
+9. [Przykłady użycia]
 
 ---
 
@@ -60,7 +60,7 @@
    ```bash
    git clone https://github.com/TwojUser/va-chat-api.git
    cd va-chat-api
-````
+
 
 2. Skonfiguruj `.env` (plik dostarczony w repozytorium):
 
