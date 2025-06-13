@@ -32,14 +32,14 @@
      - [POST /groups/]  
      - [GET /groups/]  
      - [GET /groups/{group_id}]  
-     - [POST /groups/{group_id}/add-user/{user_id}]  
-     - [POST /groups/{group_id}/remove-user/{user_id}]  
+     - [POST /groups/{group_id}/add-user/{new_user_id}]  
+     - [POST /groups/{group_id}/remove-user/{remove_user_id}]  
      - [DELETE /groups/{group_id}]  
    - [Wiadomości]  
      - [GET /messages/private/{other_user_id}]  
      - [POST /messages/private/{other_user_id}]  
-     - [GET /messages/group/{group_id}]  
-     - [POST /messages/group/{group_id}]  
+     - [GET /messages/group/{chat_id}]  
+     - [POST /messages/group/{chat_id}]  
 8. [WebSocket]  
 9. [Przykłady użycia]
 
@@ -189,11 +189,11 @@ W aplikacji są dwie role o różnych uprawnieniach:
 - user: dostęp tylko do grup, w których jest członkiem  
 - admin: dostęp do każdej grupy  
 
-#### POST /groups/{group_id}/add-user/{user_id}  
+#### POST /groups/{group_id}/add-user/{new_user_id}  
 - user: dodawanie nowych userów tylko do swoich grup  
 - admin: dodawanie nowych userów do dowolnej grupy  
 
-#### POST /groups/{group_id}/remove-user/{user_id}  
+#### POST /groups/{group_id}/remove-user/{remove_user_id}  
 - user: usuwanie userów tylko ze grup, do których należy  
 - admin: usuwanie userów z dowolnej grupy  
 
@@ -209,11 +209,11 @@ W aplikacji są dwie role o różnych uprawnieniach:
 - user: wysyłanie prywatnej wiadomości do dowolnego użytkownika  
 - admin: wysyłanie prywatnej wiadomości do dowolnego użytkownika  
 
-#### GET /messages/group/{group_id}  
+#### GET /messages/group/{chat_id}  
 - user: odczyt historii wiadomości czatu grupowego, jeśli należy do grupy  
 - admin: odczyt historii wiadomości czatu grupowego dowolnej grupy  
 
-#### POST /messages/group/{group_id}  
+#### POST /messages/group/{chat_id}  
 - user: wysyłanie wiadomości do grup, których jest członkiem  
 - admin: wysyłanie wiadomości do dowolnej grupy  
 
@@ -316,14 +316,22 @@ Authorization: Bearer <ACCESS_TOKEN>
 * **Response 200:**
 
   ```json
-  [ { ...UserRead }, { ... } ]
+  [
+  {
+    "email": "user@example.com",
+    "nickname": "string",
+    "is_admin": false,
+    "id": 0,
+    "created_at": "2025-06-13T23:00:28.773Z"
+  }
+  ]
   ```
 * **Błędy:**
 
   * `403 Forbidden` – user nie jest adminem
   * `401 Unauthorized`
 
-#### GET /users/{user\_id}
+#### GET /users/{user_id}
 
 * **Opis:** profil dowolnego usera (admin lub self)
 * **Response 200:** `UserRead`
@@ -369,25 +377,29 @@ Authorization: Bearer <ACCESS_TOKEN>
 * **Response 200:**
 
   ```json
-  [ { "id":1, "name":"...", "created_at":"..." }, ... ]
+  [
+  {
+    "name": "string",
+    "id": 0,
+    "created_at": "2025-06-13T23:01:19.731Z"
+  }
+  ]
   ```
 * **Błędy:**
 
   * `401 Unauthorized`
 
-#### GET /groups/{group\_id}
+#### GET /groups/{group_id}
 
 * **Opis:** szczegóły grupy + lista członków
 * **Response 200:**
 
   ```json
   {
-    "id": 1,
-    "name": "...",
-    "created_at": "...",
-    "members": [
-      { ...UserRead }, ...
-    ]
+  "name": "string",
+  "id": 0,
+  "created_at": "2025-06-13T23:02:21.690Z",
+  "members": []
   }
   ```
 * **Błędy:**
@@ -396,7 +408,7 @@ Authorization: Bearer <ACCESS_TOKEN>
   * `403 Forbidden` – user nie jest członkiem grupy i nie jest adminem
   * `401 Unauthorized`
 
-#### POST /groups/{group\_id}/add-user/{user\_id}
+#### POST /groups/{group_id}/add-user/{new_user_id}
 
 * **Opis:** dodanie usera do grupy
 * **Response 200:**
@@ -411,7 +423,7 @@ Authorization: Bearer <ACCESS_TOKEN>
   * `400 Bad Request` – user już należy do grupy
   * `401 Unauthorized`
 
-#### POST /groups/{group\_id}/remove-user/{user\_id}
+#### POST /groups/{group_id}/remove-user/{remove_user_id}
 
 * **Opis:** usunięcie usera z grupy
 * **Response 200:**
@@ -426,7 +438,7 @@ Authorization: Bearer <ACCESS_TOKEN>
   * `400 Bad Request` – nie znaleziono usera w grupie
   * `401 Unauthorized`
 
-#### DELETE /groups/{group\_id}
+#### DELETE /groups/{group_id}
 
 * **Opis:** usunięcie grupy
 * **Response 200:**
@@ -444,20 +456,30 @@ Authorization: Bearer <ACCESS_TOKEN>
 
 ### Wiadomości
 
-#### GET /messages/private/{other\_user\_id}
+#### GET /messages/private/{other_user_id}
 
 * **Opis:** historia wiadomości prywatnych pomiędzy dwoma userami
 * **Response 200:**
 
   ```json
-  [ { ...MessageRead }, ... ]
+  [
+  {
+    "content": "string",
+    "id": 0,
+    "timestamp": "2025-06-13T23:02:57.923Z",
+    "sender_id": 0,
+    "receiver_id": 0,
+    "group_id": 0,
+    "user_id": 0
+  }
+  ]
   ```
 * **Błędy:**
 
   * `404 Not Found` – nie znaleziono usera
   * `401 Unauthorized`
 
-#### POST /messages/private/{other\_user\_id}
+#### POST /messages/private/{other_user_id}
 
 * **Opis:** wyślij wiadomość prywatną
 * **Body:**
@@ -468,7 +490,15 @@ Authorization: Bearer <ACCESS_TOKEN>
 * **Response 201:**
 
   ```json
-  { ...MessageRead }
+  {
+  "content": "string",
+  "id": 0,
+  "timestamp": "2025-06-13T23:03:42.062Z",
+  "sender_id": 0,
+  "receiver_id": 0,
+  "group_id": 0,
+  "user_id": 0
+  }
   ```
 * **Błędy:**
 
@@ -476,13 +506,23 @@ Authorization: Bearer <ACCESS_TOKEN>
   * `422 Unprocessable Entity` – pusty content
   * `401 Unauthorized`
 
-#### GET /messages/group/{group\_id}
+#### GET /messages/group/{chat_id}
 
 * **Opis:** historia wiadomości czatu grupowego
 * **Response 200:**
 
   ```json
-  [ { ...MessageRead }, ... ]
+  [
+  {
+    "content": "string",
+    "id": 0,
+    "timestamp": "2025-06-13T23:04:03.160Z",
+    "sender_id": 0,
+    "receiver_id": 0,
+    "group_id": 0,
+    "user_id": 0
+  }
+  ]
   ```
 * **Błędy:**
 
@@ -490,7 +530,7 @@ Authorization: Bearer <ACCESS_TOKEN>
   * `403 Forbidden` – user nie jest członkiem grupy
   * `401 Unauthorized`
 
-#### POST /messages/group/{group\_id}
+#### POST /messages/group/{chat_id}
 
 * **Opis:** wyślij wiadomość do grupy
 * **Body:**
@@ -501,7 +541,15 @@ Authorization: Bearer <ACCESS_TOKEN>
 * **Response 201:**
 
   ```json
-  { ...MessageRead }
+  {
+  "content": "string",
+  "id": 0,
+  "timestamp": "2025-06-13T23:04:38.120Z",
+  "sender_id": 0,
+  "receiver_id": 0,
+  "group_id": 0,
+  "user_id": 0
+  }
   ```
 * **Błędy:**
 
@@ -524,7 +572,7 @@ Authorization: Bearer <ACCESS_TOKEN>
 
 * **Przykład:**
   * `ws://localhost:8000/ws/chat?token=<JWT>&chat_type=private&chat_id=2`
-  *`ws://localhost:8000/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3NDk4NTYwMjN9.xidg9pT4lTFpFARmmsPMgm7C3TpsUBx9hPVzRM1UH98&chat_type=private&chat_id=2`
+  * `ws://localhost:8000/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3NDk4NTYwMjN9.xidg9pT4lTFpFARmmsPMgm7C3TpsUBx9hPVzRM1UH98&chat_type=private&chat_id=2`
 
 ---
 
