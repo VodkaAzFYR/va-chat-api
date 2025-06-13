@@ -58,7 +58,7 @@
 
 1. Sklonuj repozytorium:  
    ```bash
-   git clone https://github.com/TwojUser/va-chat-api.git
+   git clone https://github.com/VodkaAzFYR/va-chat-api.git
    cd va-chat-api
 
 
